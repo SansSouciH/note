@@ -102,6 +102,10 @@
 
 ### 4. **分支操作**
 
+#### 修改分支
+
+* `git branch -m main master`：将当前分支名称main修改为master
+
 #### 创建分支
 
 - `git branch <branch-name>`：创建一个新的分支。
