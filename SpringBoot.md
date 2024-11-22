@@ -35,6 +35,14 @@ java -jar xxxxxxx.jar
 * 属性绑定
   * @ConfigurationProperties(prefix="xxx")：声明组件和配置文件的哪些属性进行绑定
   * @EnableConfigurationProperties(User.class)：当user没有加入ioc中时手动开启自动配置属性绑定。默认将没有加组件注解的user加入到ioc容器中。一般用于导入三方写好的组件进行属性绑定
+* 网络请求
+  * @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss"：传递LocalDateTime类
+  * @RequestParam(name = "age")：获取URL中的参数并绑定到函数对应名称的形参中
+  * @PathVariable(name = "id")：动态将URL中的路径参数绑定到函数对应名称的形参中，当URL路径参数和形参变量名相同时可自动绑定
+  * @RequestBody：将浏览器发送请求体中的JSON串动态绑定到实体对象中
+
+
+> 简单参数（@RequestParam）、实体参数（@RequestParam）、数组集合参数（@RequestParam）、日期参数（@DateTimeFormate）、JSON参数（@RequestBody）、路径参数（@PathVariable）
 
 
 
@@ -53,14 +61,15 @@ java -jar xxxxxxx.jar
 * @Value
 * @Bean
 * @Import
-* @RestController=@ResponseBody+@Controller
+* @RestController = @ResponseBody + @Controller
 * @Controller、@Service、@Repository、@Configuration、@Component
-* @Retention
-* @Target({ElementType.FIELD,ElementType.TYPE})
 * @Constraint
-* @RestControllerAdvice=@ControllerAdvice+@ResponseBody
+* @RestControllerAdvice = @ControllerAdvice+@ResponseBody
 * @ExceptionHandler({Exception.class})
 * @CrossOrigin
+* @RequestParam
+* @DateTimeFormate
+* @RequestBody
 
 ---
 
@@ -73,5 +82,3 @@ java -jar xxxxxxx.jar
 **自动配置原理**
 
 > @SpringApplication注解组合EnableAutoConfigration注解。EnableAutoConfiguration注解组合了Import注解，导入了AutoConfigurationSelector类。实现接口中的selectImports方法最终通过流读取META-INF目录下后缀名为imports的文件，读取文件中的全类名后加载自动配置。在springboot2.7以前读取spring.factories文件
-
-**自定义starter**

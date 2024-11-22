@@ -246,8 +246,6 @@ FROM products
 WHERE Match(note_text) Against('要搜索的文本' IN NATURAL MODE); --默认使用'自然语言'模式
 > Match()...Against()：分为三种模式->自然语言模式NATURAL LANGUAGE MODE、布尔模式BOOLEAN MODE、查询拓展模式WITH QUERY EXPANSION
 
-
-
 -----------------------------------------------------------------
 
 # 第十九章：插入数据
