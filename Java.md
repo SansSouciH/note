@@ -40,17 +40,32 @@ switch(a){
 }
 ```
 
-### 集合
+### 集合框架
 
+> Collection：List、Set、Queue；Map：HashMap、TreeMap
 
+* **Collection**：
+  * List：
+    * ArrayList
+    * LinkedList
+    * Vector
+  * Set：
+    * HashSet
+    * LinkedHashSet
+    * TreeSet
+  * Queue：
+    * LinkedList
+    * PriorityQueue
 
-
-
-
+* **Map**：
+  * HashMap
+  * LinkedHashMap
+  * TreeMap
+  * HashTable
 
 ## 面向对象
 
-### **访问范围修饰符**
+### **访问范围**
 
 `顶级类只能是public或default，内部类可用public、private、protected、缺省`
 
@@ -126,7 +141,8 @@ public class C extends A {
 
 > 普通类、接口类、枚举类、注解类
 
-* `class`：顶级类（只能public或default）、普通内部类（不能定义static对象，可用所有访问关键字）、外部类（只能用default关键字）、静态内部类（类中可定义static对象）
+* `class`：顶级类（只能public或default）、普通内部类（不能定义static对象，可用所有访问关键字）、外部类（只能用default关键字）、静态内部类（类中可定义static对象）、**匿名内部类**
+  * **匿名内部类**：`new 类名\接口名(){}`当格式为`new 类名(){}`时表示new一个继承这个类的匿名内部类；当格式为`new 接口名(){}`时表示new一个实现这个接口的类的匿名内部类
 * `interface`：常量、抽象方法、默认方法（default void method(){}）、静态方法（static void method(){}）
 * `enum`：常量、构造方法、其他自定义方法
 * `@interface`：常与@Target、@Retention注解配合
@@ -158,6 +174,15 @@ public @interface AnnotationClass{
 * 访问字段：`Field field = clazz.getField("name"); (String)field.get(instance);`
 * 操作注解：`clazz.getAnnotation(AnnotationClass.class);`反射获取类、方法、字段上的注解信息
 * 动态代理：创建动态代理，实现接口的动态实现
+
+### 多态
+
+> 面向对象中主要通过类的继承和接口来实现多态。
+
+* 方法重写：子类@Override父类方法。方法名、返回值类型、参数列表必须和父类相同
+* **向上转型**：`FatherClass fc = new SonClass();`此时`fc`实例对象可以调用`SonClass`中重写了父类方法的方法。此为隐式转换，无需强制转换
+* **向下转型**：`FatherClass fc = new SonClass();  SonClass sc = (SonClass) fc`此时`sc`实例对象可用`SonClass`类中的所有方法。向下转型是显示转型，需要强制类型转换，向下转型存在风险，如果父类引用不是子类对象会导致`ClassCastException`，可用instanceOf提前判断是否为子类对象。
+* 接口多态：一个接口可被多个类实现
 
 
 
@@ -283,8 +308,7 @@ public @interface AnnotationClass{
   * 抽象类存在构造方法，用于子类通过super()访问
   * 抽象类存在普通方法，用于子类实例化后调用
   * 抽象类的子类要么重写所有抽象方法，要么自己定义为抽象类
-
-
+* Interface：接口中存在常量（默认加public static final）、方法（默认加public abstract）、默认方法、静态方法。在Java9之后接口中可以定义private修饰的方法，但方法必须被接口中其他的默认方法或者静态方法引用。
 
 ## Java Util Concurrency
 

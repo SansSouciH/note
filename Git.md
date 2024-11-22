@@ -102,9 +102,10 @@
 
 ### 4. **分支操作**
 
-#### 修改分支
+#### 合并分支
 
 * `git branch -m main master`：将当前分支名称main修改为master
+* `git pull --rebase origin master`：获取远程master更新，将更新应用到本地分支上，本地的提交放在这些更新之后例如远程三次提交A->B->C；本地两次提交D->E；合并后变为A->B->C->D->E
 
 #### 创建分支
 
