@@ -186,40 +186,35 @@ public @interface AnnotationClass{
 
 
 
+## 高级特性
 
+### 多线程
 
-## 常用对象
+- `Thread`：线程类
+- `Runnable`：线程任务接口
+- `ExecutorService`：线程池服务
+- `Future`：表示异步计算的结果
+- `Callable`：返回结果的任务接口
+- `Semaphore`：信号量
+- `CountDownLatch`：倒计数锁存器
+- `CyclicBarrier`：循环屏障
+- `ConcurrentHashMap`：线程安全的哈希映射
+- `CopyOnWriteArrayList`：线程安全的列表
+- `AtomicInteger`：原子整数
+- `AtomicLong`：原子长整数
+- `AtomicBoolean`：原子布尔值
 
-### 基本数据类型包装类
-- `Integer`：包装 `int` 类型
-- `Double`：包装 `double` 类型
-- `Boolean`：包装 `boolean` 类型
-- `Character`：包装 `char` 类型
-- `Float`：包装 `float` 类型
-- `Long`：包装 `long` 类型
-- `Short`：包装 `short` 类型
-- `Byte`：包装 `byte` 类型
+### 网络编程
 
-### 字符串处理类
-- `String`：表示不可变字符串
-- `StringBuilder`：可变字符串，线程不安全
-- `StringBuffer`：可变字符串，线程安全
+- `Socket`：客户端套接字
+- `ServerSocket`：服务器端套接字
+- `InetAddress`：表示 IP 地址
+- `URL`：表示统一资源定位符
+- `URLConnection`：连接到 URL 的工具类
+- `HttpURLConnection`：HTTP 协议的连接工具类
 
-### 集合框架
-- `ArrayList`：基于数组的列表，线程不安全
-- `LinkedList`：基于链表的列表
-- `HashSet`：基于哈希表的集合，不允许重复元素
-- `LinkedHashSet`：基于哈希表和链表的集合，保持插入顺序
-- `TreeSet`：基于红黑树的集合，元素有序
-- `HashMap`：基于哈希表的映射，线程不安全
-- `LinkedHashMap`：基于哈希表和链表的映射，保持插入顺序
-- `TreeMap`：基于红黑树的映射，键有序
-- `Vector`：基于数组的列表，线程安全
-- `Stack`：基于 `Vector` 的栈
-- `Hashtable`：基于哈希表的映射，线程安全
-- `PriorityQueue`：基于优先队列的集合
+### IO
 
-### 输入输出流
 - `FileInputStream`：文件输入流
 - `FileOutputStream`：文件输出流
 - `BufferedReader`：带缓冲的字符输入流
@@ -234,6 +229,8 @@ public @interface AnnotationClass{
 - `DataOutputStream`：写入基本数据类型的输出流
 - `ObjectInputStream`：读取对象的输入流
 - `ObjectOutputStream`：写入对象的输出流
+
+## 常用对象
 
 ### 日期和时间
 - `Date`：表示日期和时间
@@ -250,34 +247,11 @@ public @interface AnnotationClass{
 - `Math`：数学运算工具类
 - `Random`：生成随机数
 
-### 线程和并发
-- `Thread`：线程类
-- `Runnable`：线程任务接口
-- `ExecutorService`：线程池服务
-- `Future`：表示异步计算的结果
-- `Callable`：返回结果的任务接口
-- `Semaphore`：信号量
-- `CountDownLatch`：倒计数锁存器
-- `CyclicBarrier`：循环屏障
-- `ConcurrentHashMap`：线程安全的哈希映射
-- `CopyOnWriteArrayList`：线程安全的列表
-- `AtomicInteger`：原子整数
-- `AtomicLong`：原子长整数
-- `AtomicBoolean`：原子布尔值
-
 ### 文件和路径
 - `File`：表示文件和目录路径
 - `Path`：表示文件路径（Java 7+）
 - `Paths`：路径工具类（Java 7+）
 - `Files`：文件操作工具类（Java 7+）
-
-### 网络编程
-- `Socket`：客户端套接字
-- `ServerSocket`：服务器端套接字
-- `InetAddress`：表示 IP 地址
-- `URL`：表示统一资源定位符
-- `URLConnection`：连接到 URL 的工具类
-- `HttpURLConnection`：HTTP 协议的连接工具类
 
 ### 其他常用类
 - `System`：系统相关的操作
@@ -309,12 +283,6 @@ public @interface AnnotationClass{
   * 抽象类存在普通方法，用于子类实例化后调用
   * 抽象类的子类要么重写所有抽象方法，要么自己定义为抽象类
 * Interface：接口中存在常量（默认加public static final）、方法（默认加public abstract）、默认方法、静态方法。在Java9之后接口中可以定义private修饰的方法，但方法必须被接口中其他的默认方法或者静态方法引用。
-
-## Java Util Concurrency
-
-
-
-
 
 # 基础总结
 
