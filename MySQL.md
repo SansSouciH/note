@@ -44,6 +44,10 @@ LIMIT
 6. **`ORDER BY`**：对结果进行排序。
 7. **`LIMIT`**：如果有，限制返回的行数。
 
+* union：全连接查询
+* left join：左连接查询
+* right join：右连接查询
+
 ```sql
 # 第三章：使用MySQL
 show databases
