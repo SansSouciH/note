@@ -87,6 +87,68 @@ spring:
 
 ### Nacos
 
+> 独立的服务注册中心服务。Docker部署，准备MySQL数据表持久化Nacos数据
+
+#### 快速入门
+
+*引入依赖*
+
+```xml
+<!--nacos 服务注册发现-->
+<dependency>
+    <groupId>com.alibaba.cloud</groupId>
+    <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+</dependency>
+```
+
+*配置文件*
+
+```yaml
+spring:
+  application:
+    name: main-service # 微服务名称
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.248.130:8848
+```
+
+首先创建nacos注册中心需要的表：`../sql/nacos.sql`
+
+**custom.env配置文件内容：**
+
+```properties
+PREFER_HOST_MODE=hostname
+MODE=standalone
+SPRING_DATASOURCE_PLATFORM=mysql
+MYSQL_SERVICE_HOST=xxx.xxx.xxx.xxx
+MYSQL_SERVICE_DB_NAME=nacos
+MYSQL_SERVICE_PORT=3306
+MYSQL_SERVICE_USER=xxxx
+MYSQL_SERVICE_PASSWORD=xxxxxx
+MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+```
+
+在/home目录中创建nacos目录并创建custom.env
+
+**使用docker创建nacos服务**
+
+```shell
+docker run -d \
+--name nacos \
+--env-file ./nacos/custom.env \
+-p 8848:8848 \
+-p 9848:9848 \
+-p 9849:9849 \
+--restart=always \
+nacos/nacos-server:v2.1.0-slim
+```
+
+启动后使用`docker logs -f nacos`来查看是否启动成功
+
+
+
 
 
 ## 服务调用和负载均衡
