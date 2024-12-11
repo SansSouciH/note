@@ -1,49 +1,67 @@
-# Anaconda
+# PyTorch
+
+> 下载地址：https://pytorch.org/get-started/locally/
+
+```shell
+# 进入python
+python
+>>> import torch                 # 引入torch包是否报错
+>>> torch.cuda.is_available()    # 是否可用电脑GPU
+True
+```
 
 ## 快速入门
 
-```shell
-# 创建环境
-conda create --name pythonLearn01 --prefix E:/MyProject/AnacondaEnvs/pythonLearn01 python=3.12.4
-# 激活环境
-conda activate E:\MyProject\AnacondaEnvs\pythonLearn01
-或
-conda activate pythonLearn01
-# 退出环境
-conda deactivate
-# 删除环境
-conda env remove --prefix E:/MyProject/AnacondaEnvs/pythonLearn01
-或
-conda env remove --name pythonLearn01
-# 安装应用
-conda install jupyterlab
-# 永久添加镜像源
+> 理解pytorch相当于一个工具箱，这个package中充满各种各样的开发道具
+
+`dir(torch)`：显示torch中有哪些“工具“
+
+`help(torch.cuda.is_available)`：显示工具中方法的用法和作用
+
+
+
+
+
+# Anaconda
+
+> Windows：https://repo.anaconda.com/archive/Anaconda3-2024.10-1-Windows-x86_64.exe
+>
+> Linux：https://repo.anaconda.com/archive/Anaconda3-2024.10-1-Linux-x86_64.sh
+
+**永久添加镜像源**
+
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
-```
 
-## 常用指令
+## 环境管理命令：
 
-### 环境管理命令：
 - `conda create --name myenv`：创建一个名为`myenv`的新环境。
+- `conda create --name myenv --prefix C:/user/xxx/myenv python=3.8.0`：在指定文件夹下创建环境
 - `conda activate myenv`：激活名为`myenv`的环境。
 - `conda deactivate`：退出当前环境。
 - `conda env remove --name myenv`：删除名为`myenv`的环境。
-### 包管理命令：
+- `conda env remove --prefix C:/user/xxx/myenv`：根据路径删除环境
+
+## 包管理命令：
+
 - `conda install jupyterlab`：在当前环境中安装jupyterlab包。
 - `conda update jupyterlab`：更新jupyterlab包到最新版本。
 - `conda remove jupyterlab`：从当前环境中卸载jupyterlab包。
 - `conda list`：列出当前环境中安装的所有包。
 - `conda search jupyterlab`：搜索可用的jupyterlab包版本。
-### 频繁使用的其他命令：
+
+## 频繁使用的其他命令：
+
 - `conda info`：显示conda的系统和环境信息。
 - `conda info --envs`：显示所有创建的环境。
 - `conda config --show`：显示当前conda配置。
 - `conda clean --all`：清理下载和缓存文件。
 - `conda update conda`：更新conda到最新版本。
 - `conda update anaconda`：更新Anaconda发行版到最新版本。
-### 包和环境管理：
+
+## 包和环境管理：
+
 - `conda install --channel conda-forge pandas`：从特定的通道安装包。
 - `conda install --file requirements.txt`：根据文件安装包列表。
 - `pip install requests`：进入虚拟环境后下载模块中需要的包
@@ -82,31 +100,3 @@ jupyter lab
 - `H`：显示快捷键帮助
 - `Shift + Space`：向上滚动（在单元之间导航）
 - `Space`：向下滚动
-
-
-
-
-# Python
-
-| 运算符                          | 描述                                       |
-| ------------------------------- | ------------------------------------------ |
-| +、-、*、/、%                   | 加、减、乘、除、取余                       |
-| **、//                          | 取幂（2**3结果为8）、整除                  |
-| ==、!=、>、<、>=、<=            | 等、不等、大于小于、大于等于、小于等于     |
-| =、+=、-=、*=、/=、%=、**=、//= | 赋值、加等、减等、除等、余等、幂等、整除等 |
-| &、\|、^、~、<<、>>             | 位运算符                                   |
-| and、or、not                    | 逻辑运算符                                 |
-| in、not in                      | 成员运算符                                 |
-| is、is not                      | 身份运算符                                 |
-
-
-
-| 模式       | r    | r+   | w    | w+   | a    | a+   |
-| ---------- | ---- | ---- | ---- | ---- | ---- | ---- |
-| 读         | +    | +    |      | +    |      | +    |
-| 写         |      | +    | +    | +    | +    | +    |
-| 创建       |      |      | +    | +    | +    | +    |
-| 覆盖       |      |      | +    | +    |      |      |
-| 指针在开始 | +    | +    | +    | +    |      |      |
-| 指针在结尾 |      |      |      |      | +    | +    |
-
