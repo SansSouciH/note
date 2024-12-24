@@ -114,7 +114,9 @@ spring:
       server-addr: 192.168.248.130:8848
 ```
 
-首先创建nacos注册中心需要的表：`../sql/nacos.sql`
+首先创建nacos注册中心需要的表（SQL文件路径地址）：`../sql/nacos.sql`
+
+在/home目录中创建nacos目录并创建custom.env
 
 **custom.env配置文件内容：**
 
@@ -130,8 +132,6 @@ MYSQL_SERVICE_PASSWORD=xxxxxx
 MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
 ```
 
-在/home目录中创建nacos目录并创建custom.env
-
 **使用docker创建nacos服务**
 
 ```shell
@@ -146,10 +146,6 @@ nacos/nacos-server:v2.1.0-slim
 ```
 
 启动后使用`docker logs -f nacos`来查看是否启动成功
-
-
-
-
 
 ## 服务调用和负载均衡
 

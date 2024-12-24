@@ -2,31 +2,33 @@
 
 ## 必知必会
 
-> MySQL数据类型：
->
-> 1. 整数类型：INT,BIGINT；4字节和8字节
-> 2. 浮点数类型：
->    * FLOAT(p)：单精度，p取0-24，4字节
->    * DOUBLE(p)：双精度，p取25到53，8字节
-> 3. 字符串类型：
->    * CHAR(n)：固定长度的字符类型，最长255
->    * VARCHAR(n)：可变长度的字符串，最长65535
->    * TEXT：长文本数据，最长65535
-> 4. 日期和时间类型：
->    * DATE：日期，格式’YYYY-MM-DD‘
->    * TIME：时间，格式’HH:MM:SS‘
->    * DATETIME：日期和时间，格式’YYYY-MM-DD HH:MM:SS‘
->    * TIMESTAMP：日期和时间的时间戳，和DATETIME格式一样但使用UTC时间，一般记录数据修改时间，**自动存储为当前时间**
-> 5. 布尔类型：
->    * BOOLEAN或BOOL：在MySQL中实际上就是TINYINT(1)，0表示false，1表示true
+### 一：基本数据类型
 
----
+MySQL数据类型：
+1. **整数**类型：INT,BIGINT；4字节和8字节
+2. **浮点**数类型：
+   * FLOAT(p)：单精度，p取0-24，4字节
+   * DOUBLE(p)：双精度，p取25到53，8字节
+3. **字符串**类型：
+   * CHAR(n)：固定长度的字符类型，最长255
+   * VARCHAR(n)：可变长度的字符串，最长65535
+   * TEXT：长文本数据，最长65535
+4. **日期和时间**类型：
+   * DATE：日期，格式’YYYY-MM-DD‘
+   * TIME：时间，格式’HH:MM:SS‘
+   * DATETIME：日期和时间，格式’YYYY-MM-DD HH:MM:SS‘
+   * TIMESTAMP：日期和时间的时间戳，和DATETIME格式一样但使用UTC时间，一般记录数据修改时间，**自动存储为当前时间**
+5. **布尔**类型：
+   * BOOLEAN或BOOL：在MySQL中实际上就是TINYINT(1)，0表示false，1表示true
+
+### 二：语法基本结构
 
 **MySQL查询子句结构**
 
 ```sql
 SELECT
 FROM
+	table1 as t1 连接查询关键字 table2 t2 on 连接表过滤条件
 WHERE
 GROUP BY
 HAVING
@@ -44,12 +46,16 @@ LIMIT
 6. **`ORDER BY`**：对结果进行排序。
 7. **`LIMIT`**：如果有，限制返回的行数。
 
-* union：全连接查询
-* left join：左连接查询
-* right join：右连接查询
+* `union`：返回合并结果集，重复的行会被去掉。两个表要求相同数量的列和兼容的数据类型
+* `full join`：全连接结果集，返回所有匹配的行和非匹配的行，非匹配的列显示为NULL
+* `inner join`：返回两表满足连接条件的结果
+* `left join`：左连接查询
+* `right join`：右连接查询
+* `cross join`：交叉联结
+
+### 三：使用MySQL
 
 ```sql
-# 第三章：使用MySQL
 show databases
 show tables
 use database_name
@@ -60,35 +66,42 @@ show create table_name
 show grants：显示授予用户的安全权限
 ALTER DATABASE dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci：修改数据库字符集
 ALTER TABLE tbname CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci：修改表字符集
------------------------------------------------------------------
+```
 
-# 第四章：检索数据column_name、table_name
+### 四：检索数据
+```sql
+# column_name：列名、table_name：表名
 select c_name1,c_name2 from t_name
 select distinct c_name from t_name
 select c_name from t_name limit 5：显示前5行数据（检索下标从0开始）
 select * from t_name limit 5,5：从第5行开始显示5行数据
-select * from t_name limit 4 offset 3：和3,4表示意思一样
------------------------------------------------------------------
+select * from t_name  4 offset 3：和3,4表示意思一样
+```
 
-# 第五章：排序检索数据（升序ASC降序DESC）
+### 五：排序检索
+
+> （升序ASC降序DESC）
+
+```sql
 select * from t_name order by c_name1,c_name2：按照c_name1和c_name2的顺序排序
 select * from t_name order by c_name desc：按照c_name从大到小降序排序
 select * from t_name order by c_name1 desc c_name2：按照c_name1降序排列，再然后对c_name2排序
 select price from product order by price desc limit 1：找出product中price最高的值
------------------------------------------------------------------
+```
 
-# 第六章：过滤数据
-> 注：where应在order by之前，否则会产生错误
-select * from t_name where name='lisi'
-> SQL中可用=、!=、>、<、>=、<=、between、<>（不等于）
-select c_name 
+### 六：条件查询
+```sql
+注：where应在order by之前，否则会产生错误
+> select * from t_name where name='lisi'
+SQL中可用=、!=、>、<、>=、<=、between、<>（不等于）
+> select c_name 
 from t_name 
 where c_value between value1 and value2：检索value1到value2之间的c_value值
 
 select prod_name from products where prod_price is NULL：找到prod_price为空的所有prod_name
------------------------------------------------------------------
-
-# 第七章：数据过滤
+```
+### 七：数据过滤
+```sql
 AND和OR
 select * 
 from t_name 
@@ -100,15 +113,17 @@ IN关键字：更多的选项清单时，IN比OR快
 select * from t_name where t_id in (1001,1002) order by desc
 NOT关键字
 select * from t_name where t_id not in (1001,1002) order by desc
------------------------------------------------------------------
+```
 
-# 第八章：用通配符进行过滤
+### 八：通配符过滤
+```sql
 > 搜索模式'%'、'_'
 select * from t_name where name like '%jack%'：匹配name=xxxxxjackxxxx的用户信息
 select * from t_name where name like 'jack_'：匹配name=jack*的用户信息
------------------------------------------------------------------
+```
 
-# 第九章：用正则表达式进行搜索
+### 九：正则搜索
+```sql
 select * from t_name where number regexp '.000'：匹配number为1000、2000...等*000的值
 > 注意：regexp正则表达式在一些数值匹配时与like关键字有区别。有些数值匹配时like在匹配文本时不会匹配成功
 比如：
@@ -117,9 +132,11 @@ select * from t_name where number like '1000'
 > 在like匹配到1000的文本信息时，不会返回任何值，但regexp会
 select * from t_name where number regexp '1000|2000'：匹配符合number=1000或number=2000的数据
 select * from t_name where number regexp '[1|2|3 tom]'：匹配符合1 tom或2 tom或3 tom的值
------------------------------------------------------------------
+```
 
-# 第十章：创建计算字段：就是在查询语句中对数据进行处理(加减乘除拼接取平均)再返回给用户
+### 十：创建计算字段
+```sql
+# 就是在查询语句中对数据进行处理(加减乘除拼接取平均)再返回给用户
 > Concat()、Trim()、RTrim()、Ltrim()、Now()
 select Concat('(',role_name,')') 
 from t_name：查询出role_name后输出字段名为Concat('(',role_name,')')
@@ -133,15 +150,16 @@ from t_name：查询出role_name后输出字段名为Concat('(',role_name,')')
 +---------------------------+
 > 注意：Concat()方法后输出的字段只是“值”，无法被客户机读取，因此需要使用alias创建别名返回AS关键字
 select Concat('(',item')') AS name from t_name;
------------------------------------------------------------------
+```
 
-# 第十一章：使用数据处理函数
+### 十一：使用数据处理函数
+```sql
 > 字符串处理函数
 Concat()、Substring()、Length()、Trim()、Lower()、Upper()、Replace()
 > 数值处理函数
 Abs()、Ceil()、Floor()、Round()、Mod()、Pow()、Sqrt()、Rand()
 > 日期和时间处理函数
-Now()、Date()、Time()、Year()、Month()、Day()
+timestampdiff(day\hour\second,'2024-12-23 12:00:00','2024-12-21 12:00:00')、datediff('日期1','日期2')、Now()、Date()、Time()、Year()、Month()、Day()
 > 聚合函数：用于汇总操作，常和GROUP BY一起使用
 Count()、Sum()、Avg()、Max()、Min()
 > 条件判断函数
@@ -154,9 +172,13 @@ SELECT
 		WHEN A>100  THEN 'MID'
 		ELSE name END
 FROM t_name;
------------------------------------------------------------------
+```
 
-# 第十三章：分组数据GROUP BY 必须在where后order by之前
+### 十三：分组数据
+
+> GROUP BY 必须在where后order by之前
+
+```sql
 > GROUP BY ... HAVING ... 注意：where在数据分组前过滤，having在数据分组后过滤
 select * 
 from t_name 
@@ -168,9 +190,10 @@ from products
 where prod_price>=10
 group by p_id having count(*) >= 2
 解读：找到price>=10的数据然后根据p_id进行分组，最后找到组内数量>=2的所有数据
------------------------------------------------------------------
+```
 
-# 第十四章：使用子查询
+### 十四：使用子查询
+```sql
 > IN关键字子查询
 SELECT cust_name,cust_text
 FROM customers
@@ -188,16 +211,17 @@ SELECT cust_name,
 FROM customers
 ORDER BY cust_name;
 > 执行过程：FROM读取customers表每一行->进入子查询，每一行都会执行一次子查询语句并返回子查询中的count(*)->SELECT输出cust_name和cust_state和orders->最后ORDER BY根据cust_name进行分组
------------------------------------------------------------------
+```
 
-# 第十五章：联结表（联结查询）
+### 十五：联结查询
+```sql
 > 注意：在使用多表查询时，联结表的关系是在查询语句运行中构造的。如果在SELECT中没有WHERE条件约束，那么查询*第一个表中的每一行数据将和第二行的每一行数据配对*，而不管是否逻辑上是否可以相互匹配。
 例子：SELECT v_name,p_name,p_price FROM v,p WHERE v.id = p.id ORDER BY v_name;
 > **笛卡尔积**：没有联结条件的表关系返回的结果为笛卡尔积，检索出的行的数目将是第一个表中的行数✖第二个表中的行数。
 上述例子称为'等值联结'基于两个表之间的相等测试也叫'内部联结'
------------------------------------------------------------------
-
-# 第十六章：创建高级联结
+```
+### 十六：创建高级联结
+```sql
 > 自联结、自然联结、外部联结
 自联结1(内部联结)
 SELECT prod_id,prod_name
@@ -220,9 +244,9 @@ SELECT c.cust_name,
 	   COUNT(o.order_num) AS num_ord
 FROM customers AS c JOIN orders AS o ON c.cust_id = o.cust_id
 GROUP BY c.cust_id;
------------------------------------------------------------------
-
-# 第十七章：组合查询
+```
+### 十七：组合查询
+```sql
 > UNION操作符将多条SELECT语句组合成一个结果，必须两条或以上的SELECT才能使用UNION。UNION会默认将多条SELECT语句查出的重复内容去除，如果想返回重复的行可以使用UNION ALL
 UNION使用时多条SELECT只能用一个ORDER BY排序，例：
 SELECT vend_id,prod_id,prod_price
@@ -233,9 +257,9 @@ SELECT vend_id,prod_id,prod_price
 FROM products
 WHERE vend_id IN (1001,1002)
 ORDER BY vend_id,prod_price;
------------------------------------------------------------------
-
-# 第十八章：全文本搜索
+```
+### 十八：全文本搜索
+```sql
 > 在5.6版本后MyISAM和InnoDB引擎都支持全文本搜索。
 > FULLTEXT(content1,conten2,.....)：可以指定多个列的全文本索引
 CREATE TABLE products(
@@ -249,27 +273,26 @@ SELECT note_text
 FROM products
 WHERE Match(note_text) Against('要搜索的文本' IN NATURAL MODE); --默认使用'自然语言'模式
 > Match()...Against()：分为三种模式->自然语言模式NATURAL LANGUAGE MODE、布尔模式BOOLEAN MODE、查询拓展模式WITH QUERY EXPANSION
-
------------------------------------------------------------------
-
-# 第十九章：插入数据
+```
+### 十九：插入数据
+```sql
 > INSERT INTO t_name VALUES(val1, val2, val3, NULL, 'val4', now());
 -以上插入方式并不安全
 > INSERT INTO t_name(t_id, t_name, t_address, t_score, t_text, t_time) VALUES(val1, val2, val3, NULL, 'val4', now());
 例子：插入检索出的数据
 INSERT INTO customers(cust_id,cust_contact,cust_email) SELECT cust_id,cust_contact,cust_email FROM custnew;
------------------------------------------------------------------
-
-# 第二十章：更新和删除数据
+```
+### 二十：更新和删除数据
+```sql
 > UPDATE和DELETE：使用该操作符时一定注意加上WHERE过滤条件，否则更新或删除整条列
 UPDATE例子：
 UPDATE t_name SET t_val1 = '一个更新的值1',t_val2 = '一个更新的值2' WHERE t_id = '需要更新的指定行';
 *注意：UPDATE在更新语句执行中发生错误时会将前面更新过的语句还原，如果不想前面的值被还原可以使用'IGNORE'关键字
 例：UPDATE IGNORE t_name SET ....
 DELETE FROM t_name WHERE t_id = 1001;
-
------------------------------------------------------------------
-# 第二十一章：创建和操纵表
+```
+### 二十一：创建和操纵表
+```sql
 > 创建格式如下，'*'表示常用类型，使用InnoDB引擎和utf8mb4编码格式
 CREATE TABLE example_table (
     -- 整数类型
@@ -327,11 +350,9 @@ CREATE TABLE example_table (
 						FOREIGN KEY (t_order) REFERENCES orders(order_num);
 删除表：DROP TABLE customers;
 重命名：RENAME TABLE customers;
------------------------------------------------------------------
-
-# 第二十二章：使用视图
-
 ```
+
+### 数据库存储引擎区别
 
 | 区别       | InnoDB                                                       | MyISAM                                             |
 | ---------- | ------------------------------------------------------------ | -------------------------------------------------- |
@@ -348,7 +369,7 @@ CREATE TABLE example_table (
 
 > 总结：InnoDB适合-高并发、增删改多、事务需求；MyISAM适合-读多写少的数据
 
-## 查询页面
+## 常用命令
 
 ### 一、数据库操作命令
 

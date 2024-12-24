@@ -18,9 +18,81 @@ True
 
 `help(torch.cuda.is_available)`：显示工具中方法的用法和作用
 
+## Tensorboard
 
+> 使用Transform是可视化Loss变化状态
 
+```shell
+tensorboard --logdir=生成的log文件夹名 --port=6006（默认6006） 
+```
 
+**示例代码**
+
+> 1. PIL读取图片后Numpy转换为nparray类型，加入add_image方法中tensorboard展示图片
+> 2. opencv读取图片后返回nparray类型，直接加入add_image方法中tensorboard展示图片
+
+```python
+import numpy as np
+from PIL import Image  # python内置操作图片的库
+from torch.utils.tensorboard import SummaryWriter
+
+img_path = "dataset/train/ants_imgs/5650366_e22b7e1065.jpg"
+
+writer = SummaryWriter("logs")  # 生成的tensorboard文件放在当前根目录下的logs中
+img_PIL = Image.open(img_path)  # 获得一个JPG图片类型的变量
+img_array = np.array(img_PIL)  # 将PIL类转换为nparray类
+writer.add_image("train", img_array, 2, dataformat='HWC')  # 如果img_array不是tensor类型则需要加入dataformat
+
+for i in range(100):
+    writer.add_scalar("y=x", i, i)  # 1.图像名称；2.x轴；3.y轴
+    
+writer.close()
+```
+
+## Transforms
+
+> 视transforms.py为工具箱，工具中各种方法用来转换图片的格式
+
+* `PIL`：Image.open获得JPG文件，Numpy.array转换为ndarry类型，transforms.ToTensor转换为tensor
+* `tensor`：张量，神经网络训练的基本单位，进入训练时所有的其他类型都会被转换为tensor类型加入训练模型得出结果
+* `ndarray`：transforms.ToTensor转换为tensor
+
+**ToTensor**
+
+```python
+import cv2
+from torchvision import transforms
+# 1.读取图片
+img_path = "dataset/train/ants_imgs/0013035.jpg"
+img_cv = cv2.imread(img_path)
+# 2.ndarray转换为tensor类型
+tensor_trans = transforms.ToTensor()
+tensor_img = tensor_trans(img_cv)
+```
+
+**Normalize**
+
+> 归一化图像，PIL类型不支持归一化，转化为tensor类型再归一化。归一化公式：output[channel] = (input[channel] - mean[channel]) / std[channel]
+
+```python
+import cv2
+from torch.utils.tensorboard import SummaryWriter
+from torchvision import transforms
+writer = SummaryWriter("logs_transforms")
+# 1.读取图片
+img_path = "dataset/train/ants_imgs/0013035.jpg"
+img_cv = cv2.imread(img_path)
+# 2.ndarray转换为tensor类型
+tensor_trans = transforms.ToTensor()
+img_tensor = tensor_trans(img_cv)
+print(img_tensor[0][0][0])  # 打印tensor查看结果
+# 3.定义归一化，并将tensor传入进行归一化
+trans_norm = transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+img_norm = trans_norm(img_tensor)
+print(img_norm) # 打印查看归一化类格式
+# 4.将图片
+writer.add_image("Normalize", img_norm)
+```
 
 # Anaconda
 
