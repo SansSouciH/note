@@ -157,7 +157,7 @@ select Concat('(',item')') AS name from t_name;
 > 字符串处理函数
 Concat()、Substring()、Length()、Trim()、Lower()、Upper()、Replace()
 > 数值处理函数
-Abs()、Ceil()、Floor()、Round()、Mod()、Pow()、Sqrt()、Rand()
+Abs()、Ceil()、Floor()、Round()、Mod()、Pow()、Sqrt()、Rand()、coalesce(null,0)如果查询字段为null则返回0
 > 日期和时间处理函数
 timestampdiff(day\hour\second,'2024-12-23 12:00:00','2024-12-21 12:00:00')、datediff('日期1','日期2')、Now()、Date()、Time()、Year()、Month()、Day()
 > 聚合函数：用于汇总操作，常和GROUP BY一起使用

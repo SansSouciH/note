@@ -71,7 +71,7 @@ switch(a){
 
 * public：不同包，不同类，同类中都可访问
 * private：只在同一类中访问，不同包不可访问
-* protected：只在同一包和子类中可访问
+* protected：只在同一包和不同包子类中可访问
 * default（缺省）：同一包中可访问
 
 ```java
@@ -184,9 +184,55 @@ public @interface AnnotationClass{
 * **向下转型**：`FatherClass fc = new SonClass();  SonClass sc = (SonClass) fc`此时`sc`实例对象可用`SonClass`类中的所有方法。向下转型是显示转型，需要强制类型转换，向下转型存在风险，如果父类引用不是子类对象会导致`ClassCastException`，可用instanceOf提前判断是否为子类对象。
 * 接口多态：一个接口可被多个类实现
 
-
-
 ## 高级特性
+
+### IO
+
+> 节点流：直接对数据进行对接，更加接近数据。例：下图访问文件、数组、管道、字符串
+>
+> 处理流（包装流）：将节点流进行统一处理。例：缓冲流构造函数中可以引入节点流中的类
+
+| 分类         | 字节输入流              | 字节输出流               | 字符输入流         | 字符输出流         |
+| ------------ | ----------------------- | ------------------------ | ------------------ | ------------------ |
+| **抽象基类** | InputStream             | OutputStream             | Reader             | Writer             |
+| **访问文件** | **FileInputStream**     | **FileOutputStream**     | **FileReader**     | **FileWriter**     |
+| 访问数组     | ByteArrayInputStream    | ByteArrayOutputStream    | CharArrayReader    | CharArrayWriter    |
+| 访问管道     | PipedInputStream        | PipedOutputStream        | PipedReader        | PipedWriter        |
+| 访字符串     |                         |                          | StringReader       | StringWriter       |
+| **缓冲流**   | **BufferedInputStream** | **BufferedOutputStream** | **BufferedReader** | **BufferedWriter** |
+| 对象流       | ObjectInputStream       | ObjectOutputStream       |                    |                    |
+| 抽象基类     | FilterInputStream       | FilterOutputStream       | FilterReader       | FilterWriter       |
+| 打印流       |                         | PrintStream              |                    | PrintWriter        |
+| 推回输入流   | PushbackInputStream     |                          | PushbackReader     |                    |
+| 特殊流       | DataInputStream         | DataOutputStream         |                    |                    |
+
+* 文件流
+  * `File`：操作文件的对象实现类，实现`Serializable, Comparable<File>`接口。
+
+* 字节流（二进制文件）
+  * `InputStream`：字节输入流总接口
+    * `FileInputStream`：文件输入流
+    * `FilterInputStream`：主要作用是作为其他输入流类的基类
+      * `BufferedInputStream`：缓冲字节输入流
+      * `DataInputStream`：读取基本数据类型的输入流
+    * `ObjectInputStream`：读取对象的输入流
+  * `OutputStream`：字节输出流总接口
+    * `FileOutputStream`：文件字节输出流
+    * `FilterOutputStream`：主要作用是作为其他输入流类的基类
+      * `BufferedOutputStream`：文件字节输出流
+      * `DataOutputStream`：写入基本数据类型的输出流
+      * `PrintStream`：打印流，支持格式化输出
+    * `ObjectOutputStream`：写入对象的输出流
+* 字符流（字符文件）
+  * `Reader`：字符输入流总接口
+    * `InputStreamReader`：将字节流转换为字符流
+      * `FileReader`：文件字符输入流
+    * `BufferedReader`：带缓冲的字符输入流
+  * `Writer`：字节输出流总接口
+    * `OutputStreamWriter`：将字符流转换为字节流
+      * `FileWriter`：文件字符输出流
+    * `BufferedWriter`：带缓冲的字符输出流
+    * `PrintWriter`：打印流，支持格式化输出
 
 ### 多线程
 
@@ -213,22 +259,7 @@ public @interface AnnotationClass{
 - `URLConnection`：连接到 URL 的工具类
 - `HttpURLConnection`：HTTP 协议的连接工具类
 
-### IO
-
-- `FileInputStream`：文件输入流
-- `FileOutputStream`：文件输出流
-- `BufferedReader`：带缓冲的字符输入流
-- `BufferedWriter`：带缓冲的字符输出流
-- `FileReader`：文件字符输入流
-- `FileWriter`：文件字符输出流
-- `InputStreamReader`：将字节流转换为字符流
-- `OutputStreamWriter`：将字符流转换为字节流
-- `PrintStream`：打印流，支持格式化输出
-- `PrintWriter`：打印流，支持格式化输出
-- `DataInputStream`：读取基本数据类型的输入流
-- `DataOutputStream`：写入基本数据类型的输出流
-- `ObjectInputStream`：读取对象的输入流
-- `ObjectOutputStream`：写入对象的输出流
+### JUC
 
 ## 常用对象
 
