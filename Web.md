@@ -56,7 +56,7 @@ my-vue3-app/
 | `v-for`     | 循环渲染列表"(item,indx) in items"或"item in items"          | 无简写 |
 | `v-show`    | 根据条件显示或隐藏 DOM 元素display=none（频繁切换显示的场景） | 无简写 |
 | `v-on`      | 绑定事件监听器（@click）                                     | `@`    |
-| `v-slot`    | 定义插槽，传递内容                                           | 无简写 |
+| `v-slot`    | 定义插槽，传递内容                                           | #      |
 | `v-html`    | 将字符串渲染为 HTML（小心 XSS）                              | 无简写 |
 | `v-text`    | 动态插入纯文本内容                                           | 无简写 |
 | `v-pre`     | 跳过编译，保留原始模板                                       | 无简写 |
@@ -108,7 +108,6 @@ import App from "./App.vue";
 //引入全局配置
 import router from "./router";
 import store from "./store";
-//yi
 import './assets/styles.css';
 
 
@@ -119,64 +118,23 @@ app.use(router);
 app.mount("#app");
 ```
 
----
+___
 
 ```javascript
-//1.setup使用和OptionAPI
-<script lang="ts" setup>  //自动export default{}和自动return{}
-</script>
-------------------------------------------------------------------------
-
-//2.ref和reactive使用
-let name = ref('zhangsan');   //name被定义为响应式数据
-let arr = reactive({
-  age:19,
-  address:"wuhan"
-});
-> 修改ref数据时需要：name.value = 新数据
-> reactive修改整体对象时需要使用Object.assign(obj1,obj2,obj3...)
-------------------------------------------------------------------------
-
-//3.toRefs和toRef
-const state = reactive({
-    name:'',
-    age:19
-});
-
-const name1 = toRef(state,'name');
-const obj = toRefs(state);
-------------------------------------------------------------------------
-
-//4.computed
-let firstName = ref('zhang');
-let lastName = ref('san');
-let fullName = computed(()=>{
-    return firstName.value + lastName.value;
-});
-
-------------------------------------------------------------------------
-
-//5.watch：监视1.ref定义的数据2.reactive定义的数据3.函数返回一个值4.一个包含上述内容的数组
-import {watch} from 'vue'
-> 开启监视watch('监视目标ref不用value','回调函数')
-> 解除监视stopWatch()
-
-> 开启对象数据内部的变化需要开启'深度监视'；reactive定义的对象自动开启'深度监视'；可以单独监视对象内的某一个值
-watch('监视对象',(newValue,oldValue)=>{
-    //当监视对象的地址改变后oldValue会指向旧的值
-},{deep:true})
+const { proxy } = getCurrentInstance();
+    A[调用 getCurrentInstance] --> B{获取 proxy 对象}
+    B --> C[使用 useDict 获取字典数据]
+    B --> D[使用 $modal 显示提示]
+    B --> E[使用 $download 下载文件]
+    B --> F[使用 $refs 操作组件]
+    B --> G[使用 router 进行页面跳转]
+    B --> H[使用 route 获取路由参数]
+    B --> I[使用 resetForm 重置表单]
 ```
 
-| 功能                                 | 实现 |
-| ------------------------------------ | ---- |
-| Axios发送请求（POST\GET）            | ✔    |
-| 操作路由（点击前、点击后、跳转页面） |      |
-| 状态管理（Store、Pinia）             |      |
-| 通信与长连接（WebSocket）            |      |
+## Router
 
-## Vue-Router
-
-### 入门
+### 快速入门
 
 * `RouterLink`：类似<a>标签功能，但vue-router能做到重新加载页面不改变url路径
 * `RouterView`：一个路由声明，在哪用到了RouterLink就在哪个页面声明一下<RouterView/>
@@ -184,7 +142,7 @@ watch('监视对象',(newValue,oldValue)=>{
 * 路由器创建由createRouter()方法创建
 * router.push('目标页面url')：引入useRouter组件后使用useRouter()方法使用
 
-### 动态路由
+动态路由
 
 ```javascript
 import { createRouter, createWebHistory } from 'vue-router'
@@ -216,29 +174,167 @@ const router = createRouter({
 export default router
 ```
 
+# ES6
 
+> ECMAScript2015标准
 
+## 基础语法
 
-
-## Pinia
-
-### 入门
+* **let、const用法**
 
 ```javascript
-import { createPinia } from 'pinia'
-import { createApp } from 'vue'
-import App from './App.vue'
+let a = 1;    //局部变量，不可重复声明
+const b = 2;  //局部常量，不可重复赋值
 
-const pinia = createPinia()
-createApp(App).use(pinia).mount('#app')
+//解构表达式
+let arr = [1,2,3];
+let [x,y,z] = arr;
 
+let person = {
+    name:"zhangsan",
+    age:18,
+    email:"xxxxxxxxxx"
+}
+let {name, age} = person
 ```
 
+* **链判断**
 
+```javascript
+let message = null;
+let content = message?.body?.user?.firstName || 'defualt';
+console.log(content)
+```
 
-* Store：
+* **参数默认值**
 
+```javascript
+function add(a, b = 5){
+    return a + b;
+}
+console.log(add(1))  //b为默认值5，有默认值的参数只能在函数声明的最后面
+```
 
+* **箭头函数**
+
+```javascript
+let print1 = (arg) => {
+    console.log(arg)
+    console.log(arg)
+}
+print1(3333)
+
+let sum = (a,b) => {
+    let x = a + b;
+    console.log(x);
+}
+sum(1, 5)
+```
+
+* **模板字符串**
+
+```javascript
+let info = `你好，我的名字是：${name}, 年龄是：${age}，邮箱是：${person.email}`
+```
+
+* **Promise**：待定（pending）、已兑现（fulfilled）、已拒绝（rejected）
+
+```javascript
+//异步对象，声明后在后台运行，运用 .then 接收异步返回数据。类似CompletableFuture
+let promise = fetch("www.baidu.com");
+promise.catch();   //操作失败后
+promise.then(response => {
+    //操作成功后
+    response.json().then(data => {
+        //json()同样也是返回promise对象
+        console.log(data)
+    })
+});
+
+//自定义Promise
+function get(url) {
+    //案例：改造同步请求为异步请求
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            type: "GET",
+            success(result) {
+                resolve(result);
+            },
+            error(error) {
+                reject(error);
+            }
+        })
+    })
+}
+get("www.baidu.com").then(resp => {}).catch(err => {})
+```
+
+* **async 与 await**
+
+```javascript
+//普通方法变异步方法
+async function func1() {
+    let x = 101;
+    if (x % 2 === 0) {
+        return x;
+    } else {
+        throw new Error("x不是偶数")
+    }
+}
+func1().then(resp => {}).catch(err => {})
+
+//普通方法中的异步方法变同步方法
+async function func2() {
+    let promise1 = await fetch(url);
+    let promise2 = await promise1.json();
+    console.log(promise2.data)
+}
+//无优化方法
+function func3() {
+    let promise = fetch(url);
+    promise.then(resp => {
+        let jPromise = resp.json();
+        jPromise.then(jdata => {
+            console.log(jdata)
+        })
+    })
+}
+```
+
+* **export 和 export default**
+
+```javascript
+export function func(){}
+export const a = {}
+```
+
+# Vite
+
+> 快速搭建前端项目脚手架、统一工程化规范、自动化构建和部署
+>
+> 官方网站：https://cn.vitejs.dev
+
+```shell
+npm create vite
+```
+
+* package.json：包管理json文件
+
+```json
+{
+    ...,
+    "scripts":{
+    	"dev": "vite",
+        "build:prod": "vite build",
+        "build:stage": "vite build --mode staging",
+        "preview": "vite preview"
+	},
+    ...
+}
+```
+
+* vite.config.js：服务器配置、别名配置、构建配置、环境变量配置、其他配置
 
 # HTML
 
@@ -384,6 +480,7 @@ createApp(App).use(pinia).mount('#app')
   <input type="text" required />
   ```
 - `disabled`：禁用表单元素，使其不可交互。
+  
   ```html
   <input type="text" disabled />
   ```
@@ -414,6 +511,7 @@ createApp(App).use(pinia).mount('#app')
   <img src="image.jpg" alt="Sample image" />
   ```
 - `alt`：为图片提供替代文本，适用于图片无法显示时或用于屏幕阅读器。
+  
   ```html
   <img src="image.jpg" alt="A beautiful sunset" />
   ```
@@ -432,6 +530,7 @@ createApp(App).use(pinia).mount('#app')
   <audio src="song.mp3" controls></audio>
   ```
 - `loop`：让音频或视频文件循环播放。
+  
   ```html
   <video src="movie.mp4" loop></video>
   ```
@@ -442,16 +541,19 @@ createApp(App).use(pinia).mount('#app')
 
 ### 5. **表格属性**
 - `colspan`：让单元格跨越多列（用于 `<td>` 和 `<th>` 标签）。
+  
   ```html
   <td colspan="2">Merged cell</td>
   ```
 - `rowspan`：让单元格跨越多行。
+  
   ```html
   <td rowspan="2">Merged cell</td>
   ```
 
 ### 6. **事件属性**
 - `onclick`：在点击时触发 JavaScript 函数。
+  
   ```html
   <button onclick="alert('Button clicked!')">Click me</button>
   ```
@@ -466,6 +568,7 @@ createApp(App).use(pinia).mount('#app')
 
 ### 7. **语言和方向属性**
 - `lang`：定义文档或元素的语言。
+  
   ```html
   <p lang="en">This is an English text.</p>
   ```
@@ -476,6 +579,7 @@ createApp(App).use(pinia).mount('#app')
 
 ### 8. **SEO 和文档属性**
 - `meta charset`：定义页面的字符集（通常设置为 UTF-8）。
+  
   ```html
   <meta charset="UTF-8" />
   ```
@@ -486,10 +590,12 @@ createApp(App).use(pinia).mount('#app')
 
 ### 9. **其他常用属性**
 - `hidden`：将元素隐藏（仍然在 DOM 中，但不会显示）。
+  
   ```html
   <p hidden>This text is hidden</p>
   ```
 - `draggable`：指定元素是否可以被拖动。
+  
   ```html
   <img src="image.jpg" draggable="true" />
   ```

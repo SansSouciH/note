@@ -1,24 +1,21 @@
 # Redis
 
-## Redis基础
+## 快速入门
 
 > Nosql数据库，主要有：string（字符串）、List（列表）、set（集合）、zset（有序集合）、hash（哈希）
 
-### 五大常用类型
+### 数据类型
 
-#### String（字符串）
-
-> String类型是一个二进制安全的。意味着String可以包含任何数据，比如jpg图片或者序列化的对象，String类型是Redis最基本的数据类型，一个Redis中字符串value最多可以是512M
+#### String
 
 基本指令：
 
-* set <key> <value>：设置一个String键值对
+* **SET** key value 					         设置指定key的值
+* **GET** key                                        获取指定key的值
+* **SETEX** key seconds value         设置指定key的值，并将 key 的过期时间设为 seconds 秒
+* **SETNX** key value                        只有在 key    不存在时设置 key 的值
 
-* append <key> <value>：在key的value后添加指定value
-
-* strlen <key>：获取key中value的长度
-
-* setnx <key>：只有当key不存在时，设置key的值
+> String类型是一个二进制安全的。意味着String可以包含任何数据，比如jpg图片或者序列化的对象，String类型是Redis最基本的数据类型，一个Redis中字符串value最多可以是512M
 
 拓展指令：
 
@@ -34,7 +31,31 @@
 1. String的数据结构为简单动态字符串，是可以修改的字符串，内部结构实现上类似于Java的ArrayList（动态扩容数组），采用了预分配冗余空间来减少内存的频繁分配 
 2. String的初始预留空间为1M，当String长度小于1M时，每次扩容空间都会成倍增长，当String长度大于1M时，每次扩容空间为1M.注意String最大存储512M
 
-#### List（列表）
+#### Hash
+
+基本指令：
+
+* **HSET** key field value             将哈希表 key 中的字段 field 的值设为 value
+* **HGET** key field                       获取存储在哈希表中指定字段的值
+* **HDEL** key field                       删除存储在哈希表中的指定字段
+* **HKEYS** key                              获取哈希表中所有字段
+* **HVALS** key                              获取哈希表中所有值
+
+> Redis hash是一个string类型的field和value的映射表，hash特别适合用于存储对象。类似Java中的Map<String,Object>
+
+---
+
+**Redis中Hash的数据结构：**
+
+1. Hash类型对应的数据结构是两种：ziplist（压缩列表），hashtable（哈希表）。当field-value长度较短且个数较少时，使用ziplist，否则使用Hashtable
+
+#### List
+
+* **LPUSH** key value1 [value2]         将一个或多个值插入到列表头部
+* **LRANGE** key start stop                获取列表指定范围内的元素
+* **RPOP** key                                       移除并获取列表最后一个元素
+* **LLEN** key                                        获取列表长度
+* **BRPOP** key1 [key2 ] timeout       移出并获取列表的最后一个元素， 如果列表没有元素会阻塞列表直到等待超    时或发现可弹出元素为止
 
 > Redis列表是简单的**字符串链表**，按照插入顺序排序。底层是一个**双向循环链表**，通过两端操作性能比较高，通过索引下标的操作中间表节点性能较差
 
@@ -63,7 +84,14 @@
 
 1. List的数据结构为快速链表QuickList，在列表元素比较少的情况下会使用一块连续的内存存储，这个结构是ziplist（压缩列表）。它将所有的元素紧挨着一起存储，分配的是一块连续的内存，当数据量比较多的时候才会改成quicklist
 
-#### Set（集合）
+#### Set
+
+- **SADD** key member1 [member2]            向集合添加一个或多个成员
+- **SMEMBERS** key                                         返回集合中的所有成员
+- **SCARD** key                                                  获取集合的成员数
+- **SINTER** key1 [key2]                                   返回给定所有集合的交集
+- **SUNION** key1 [key2]                                 返回所有给定集合的并集
+- **SREM** key member1 [member2]            移除集合中一个或多个成员
 
 > 与list基本一样，不同的是set有自动去重功能，底层是字典的Hash表的结构，做增删查的操作基本都是O(1)的时间复杂度
 
@@ -87,28 +115,12 @@
 
 1. 和Java中HashSet的实现方式类似（使用HashMap实现），Redis中的Set结构内部同样使用了hash结构，所有的value都指向同一个内部值
 
-#### Hash（哈希）
+#### Zset
 
-> Redis hash是一个string类型的field和value的映射表，hash特别适合用于存储对象。类似Java中的Map<String,Object>
-
-基本指令：
-
-* hset <key> <field> <value>：给key集合中的field字段赋上value值
-* hget <key> <field>：取出key集合中field中取出value
-* hmset <key> <field1> <value1> <field2> <value2>....：批量设置hash的值
-* hexists <key> <field>：查看hash表中field字段是否存在
-* hkeys <key>：查看key集合中的所有field
-* hvals <key>：查看key集合中所有value
-* hincrby <key> <field> <number>：为哈希表key中的域field的值加上number，或者-number
-* hsetnx <key> <field> <value>：和hset类似，不过只有当field不存在时才能设置成功
-
----
-
-**Redis中Hash的数据结构：**
-
-1. Hash类型对应的数据结构是两种：ziplist（压缩列表），hashtable（哈希表）。当field-value长度较短且个数较少时，使用ziplist，否则使用Hashtable
-
-#### Zset（有序集合）
+- **ZADD** key score1 member1 [score2 member2]     向有序集合添加一个或多个成员
+- **ZRANGE** key start stop [WITHSCORES]                     通过索引区间返回有序集合中指定区间内的成员
+- **ZINCRBY** key increment member                              有序集合中对指定成员的分数加上增量 increment
+- **ZREM** key member [member ...]                                移除有序集合中的一个或多个成员
 
 > zset与set很类似，不过zset除了拥有set的特性之外，还能自动排序。有序集合中每个成员都关联了一个评分（score），这个评分被用来按照从最低分到最高分的方式排序集合中的成员。集合的成员是唯一的，但是评分是可以重复的
 
@@ -148,6 +160,13 @@ decrby <key> 10：将key中存储的数字减10
 
 ### 常用指令
 
+Redis的通用命令是不分数据类型的，都可以使用的命令：
+
+- KEYS pattern 		查找所有符合给定模式( pattern)的 key 
+- EXISTS key 		检查给定 key 是否存在
+- TYPE key 		返回 key 所储存的值的类型
+- DEL key 		该命令用于在 key 存在是删除 key
+
 **key相关**命令：
 
 * keys *：查看当前库中所有的key
@@ -180,9 +199,11 @@ config set requirepass [密码]
 config get requirepass
 ```
 
-## Redis事务、锁、秒杀
+## 高级部分
 
-#### 事务
+### 事务、锁、秒杀
+
+事务
 
 > Redis事务是一个单独的隔离操作：事务中的所有命令都会序列化、按照顺序的执行。事务在执行的过程中，不会被其他客户端发来的命令所打断。Redis事务的主要作用就是**串联多个命令**防止别的命令插队
 
@@ -194,7 +215,7 @@ config get requirepass
 
 `事务的错误处理：在组队过程中如果出现错误，那么所有组队将会在执行时失败并退出事务，如果组队中未出现错误但在exec后执行出现错误，那么只有那一个出现错误的指令会执行失败，其他未出现错误的指令则会执行成功`
 
-##### 事务冲突
+事务冲突
 
 > 使用锁的方式解决事务冲突
 
@@ -216,9 +237,9 @@ config get requirepass
 3. 不保证原子性
    * 事务中如果有一条指令执行失败，其他的命令依然会顺序执行，没有回滚操作
 
-## Redis持久化
+### 持久化
 
-### RDB（redis database）
+RDB（redis database）
 
 > 在**指定的事件间隔内**将数据集**快照**写入硬盘（比如每10秒将数据集写入硬盘）**写时复制技术**。
 
@@ -233,7 +254,7 @@ RDB**特点**：
 1. 整个过程不进行任何IO操作，因此速度极快
 2. 最后一次持久化后的数据可能丢失（因为rdb是设置每多少秒内如果有多少个key改变了才进行持久化存储，那么如果在）
 
-### AOF（Append Only File）
+AOF（Append Only File）
 
 > * 以日志的形式来记录每个写操作（增量保存），将Redis执行过的所有写指令记录下来（读操作不记录），只能追加文件不能改写文件
 > * 简单来说就是记录下所有我们的写入指令保存在日志文件当中，当我们重启redis或需要恢复数据时，redis会将日志中的所有指令从前到后执行一次完成数据恢复工作
@@ -275,11 +296,9 @@ AOF**特点**：
 
 * 当AOF和RDB存储都开启时，redis听取AOF存储方式
 
-## Redis配置文件
+### 配置文件
 
-### 常用配置
-
-#### 网络、日志配置
+**网络、日志配置**
 
 ```shell
 ###################################  NETWORK ###################################
@@ -320,9 +339,9 @@ logfile /usr/local/redis/var/redis.log
 databases 16
 ```
 
-#### 快照、持久化配置
+**快照、持久化配置**
 
-##### RDB存储
+1. RDB存储
 
 ```shell
 ###################################  SNAPSHOTTING  ###################################
@@ -351,7 +370,7 @@ dir /usr/local/redis/var
 # 在我的虚拟机中存储目录是 dir /mydata/redis/data
 ```
 
-##### AOF存储
+2. AOF存储
 
 ```shell
 ###################################  APPEND ONLY MODE  ###################################
@@ -385,8 +404,6 @@ aof-load-truncated yes
 # 字符串并加载带前缀的RDB文件，然后继续加载AOF尾巴
 aof-use-rdb-preamble yes
 ```
-
-
 
 ## 原理部分
 
@@ -2178,11 +2195,3 @@ while(true) {
 ![image-20230227231507812](stream总结.png)
 
 `stream依赖redis本身持久化，消息确认机制只能用于消费者的消费，不支持生产者消费的机制，不支持消费事务、消费的有序性等，如果需要使用上面的功能则需要使用更为完善的消息队列例如MQ、Kafka等。`
-
-# 字节课程笔记
-
-* 基本原理：
-  * 客户端发送RESP协议访问redis服务 -> 将操作读写到内存中并将操作命令追加到AOF文件中，并压缩。
-  * RDB文件中保存的是redis中所有的信息。redis先执行RDB文件同步数据再检查AOF中有没有指令没有执行。
-
-![image-20230220212157386](redis读取流程.png)

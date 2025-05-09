@@ -64,3 +64,30 @@ User-Agent: xxxxxxxxxxxxxxxxxChrome/...
 | Cache-Control    | 指示客户端如何缓存，例max-age=300表示最多缓存300秒 |
 | Set-Cookie       | 告诉浏览器为当前页面所在的域设置cookie             |
 
+# 内网穿透
+
+cploar：https://dashboard.cpolar.com/get-started
+
+```shell
+# 进入cploar.exe文件
+cpolar.exe authtoken [cpolar生产的token]
+cpolar.exe http 8080
+```
+
+生成
+
+```shell
+cpolar by @bestexpresser                                                                                (Ctrl+C to quit)
+
+Tunnel Status       online
+Account             2335314209 (Plan: Free)
+Version             2.86.16/3.18
+Web Interface       127.0.0.1:4042
+Forwarding          http://73e4a4e5.r17.cpolar.top -> http://localhost:8080
+Forwarding          https://73e4a4e5.r17.cpolar.top -> http://localhost:8080
+# Conn              0
+Avg Conn Time       0.00ms
+```
+
+
+

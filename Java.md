@@ -44,23 +44,38 @@ switch(a){
 
 > Collection：List、Set、Queue；Map：HashMap、TreeMap
 
-* **Collection**：
+* **Collection**：`add(E e)`；`remove(Object o)`；`contains(Object o)`；`size()\isEmpty()\iterator()\clear()\toArray()`
   * List：
+    * * `get(int index)` - 获取指定位置元素
+      * `set(int index, E element)` - 设置指定位置元素
+      * `add(int index, E element)` - 在指定位置插入元素
+      * `remove(int index)` - 删除指定位置元素
+      * `indexOf(Object o)` - 返回元素首次出现的位置
+      * `lastIndexOf(Object o)` - 返回元素最后一次出现的位置
+      * `subList(int fromIndex, int toIndex)` - 返回子列表
     * ArrayList
     * LinkedList
     * Vector
-  * Set：
+  * Set：继承Collection接口
     * HashSet
     * LinkedHashSet
     * TreeSet
   * Queue：
+    * * `offer(E e)` - 添加元素(优于add)
+      * `poll()` - 获取并移除队首元素
+      * `peek()` - 获取但不移除队首元素
+      * `element()` - 获取但不移除队首元素(空队列抛异常)
     * LinkedList
     * PriorityQueue
-
-* **Map**：
+  
+* **Map**：`put(K key, V value)`；`get(Object key)`；`remove(Object key)`；`containsKey(Object key)`；`containsValue(Object value)`；`size()\isEmpty()\clear()\keySet()\values()\entrySet()`；
   * HashMap
   * LinkedHashMap
   * TreeMap
+    * `firstKey()` - 返回第一个键
+    * `lastKey()` - 返回最后一个键
+    * `higherKey(K key)` - 返回大于给定键的最小键
+    * `lowerKey(K key)` - 返回小于给定键的最大键
   * HashTable
 
 ## 面向对象

@@ -2,15 +2,21 @@
 
 官方文档https://docs.spring.io/spring-boot/redirect.html?page=using#using.build-systems.starters
 
-## 快速入门
+> Spring的作用：
+>
+> 1. IOC容器自动配置和管理Bean
+> 2. AOP：实现面向切面编程，解耦重复代码
+> 3. JDBC：实现声明式事务管理
+> 4. Boot：实现SpringBoot简化配置和约定大于配置的项目开发
+>
+> 创建SpringBoot、Maven添加需要的依赖、设置配置文件、进入开发
+
+## 常用注解
 
 ```shell
-# clean后package执行springboot打包后的jar文件；
 # 在外部修改springboot的配置文件：在.jar包下创建application.properties
 java -jar xxxxxxx.jar
 ```
-
-* maven创建项目 -> 引入springboot父程序依赖和相关依赖 -> 创建@SpringbootApplication指定的主程序 -> 创建业务 -> 利用继承springboot的maven打包插件 -> 运行java -jar xxxxxx.jar文件
 
 > 自动配置：maven中导入了spring-boot-starter（springboot的场景启动器），starter中继续导入了spring-boot-autoconfigure包中导入了全场景的依赖包，但不是所有场景的依赖包都会被激活（导入哪个包就自动配置哪个依赖）。
 >
@@ -18,8 +24,6 @@ java -jar xxxxxxx.jar
 > * application.properties中的所有配置都会被springboot绑定到**指定的类属性**中
 
 ---
-
-**常用注解**：
 
 * 组件注册（给ioc容器中注册自定义组件）
   * @Configuration：替代spring时代的xml配置文件，一般加在指定类上并且用@Bean将指定方法加入到ioc中。
@@ -40,23 +44,6 @@ java -jar xxxxxxx.jar
   * @RequestParam(name = "age")：获取URL中的参数并绑定到函数对应名称的形参中
   * @PathVariable(name = "id")：动态将URL中的路径参数绑定到函数对应名称的形参中，当URL路径参数和形参变量名相同时可自动绑定
   * @RequestBody：将浏览器发送请求体中的JSON串动态绑定到实体对象中
-
-
-> 简单参数（@RequestParam）、实体参数（@RequestParam）、数组集合参数（@RequestParam）、日期参数（@DateTimeFormate）、JSON参数（@RequestBody）、路径参数（@PathVariable）
-
-
-
-
-## 其他
-
-> Spring的作用：
->
-> 1. IOC容器自动配置和管理Bean
-> 2. AOP：实现面向切面编程，解耦重复代码
-> 3. JDBC：实现声明式事务管理
-> 4. Boot：实现SpringBoot简化配置和约定大于配置的项目开发
->
-> 创建SpringBoot、Maven添加需要的依赖、设置配置文件、进入开发
 
 * @Value
 * @Bean
@@ -79,6 +66,28 @@ java -jar xxxxxxx.jar
 * @ConditionalOnMissingBean(类名.class)：不存在当前类型的bean时，才声明该bean
 * @ConditionalOnClass(name = "全类名")：当环境存在指定的这个类时，才声明该bean
 
+
+> 简单参数（@RequestParam）、实体参数（@RequestParam）、数组集合参数（@RequestParam）、日期参数（@DateTimeFormate）、JSON参数（@RequestBody）、路径参数（@PathVariable）
+
+## Spring Cache
+
+* `@EnableCaching`：开启缓存注解，通常在启动类上
+* `@Cacheable(cacheNames="xxxxxCache", key="#xxxxxx.id")`：方法执行前查询缓存，没有指定缓存数据时调用方法并将方法返回值加入缓存
+* `@CachePut`：将方法返回值放到缓存中
+* `@CacheEvict`：将一条或多条数据从缓存中删除
+
+## Spring Task
+
+* `@EnableScheduling`：启动类，启用定时任务
+* `@Scheduled`：成员方法，设置任务。
+  * **`fixedRate`**：固定频率执行（单位：毫秒），无论上次任务是否完成。
+  * **`fixedDelay`**：固定延迟执行（单位：毫秒），等待上次任务完成后开始计时。
+  * **`cron`**：使用Cron表达式定义复杂调度规则。
+
+
+## 其他
+
 **自动配置原理**
 
 > @SpringApplication注解组合EnableAutoConfigration注解。EnableAutoConfiguration注解组合了Import注解，导入了AutoConfigurationSelector类。实现接口中的selectImports方法最终通过流读取META-INF目录下后缀名为imports的文件，读取文件中的全类名后加载自动配置。在springboot2.7以前读取spring.factories文件
+

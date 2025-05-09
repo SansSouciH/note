@@ -21,8 +21,8 @@
 - `git config --global user.email "you@example.com"`：设置全局用户邮箱。
 
   ```shell
-  git config --global user.name "Your Name"
-  git config --global user.email "you@example.com"
+  git config --global user.name "xxxxxxx"
+  git config --global user.email "xxxxxxxxxxxx@xxx.com"
   ```
 
 #### 查看配置
