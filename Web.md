@@ -56,131 +56,272 @@ my-vue3-app/
 | `v-for`     | 循环渲染列表"(item,indx) in items"或"item in items"          | 无简写 |
 | `v-show`    | 根据条件显示或隐藏 DOM 元素display=none（频繁切换显示的场景） | 无简写 |
 | `v-on`      | 绑定事件监听器（@click）                                     | `@`    |
-| `v-slot`    | 定义插槽，传递内容                                           | #      |
+| `v-slot`    | 定义插槽，父组件向子组件传递页面模板内容                     | #      |
 | `v-html`    | 将字符串渲染为 HTML（小心 XSS）                              | 无简写 |
 | `v-text`    | 动态插入纯文本内容                                           | 无简写 |
 | `v-pre`     | 跳过编译，保留原始模板                                       | 无简写 |
 | `v-cloak`   | 避免未编译模板闪现                                           | 无简写 |
 | `v-once`    | 只渲染一次，提升性能                                         | 无简写 |
+| `{{}}`      | 插值`{{person.name}}`                                        | 无简写 |
 
 **生命周期**
 
+> 创建期、挂载期、更新期、销毁期
+
 ![vue3生命周期](.\img\vue3生命周期.png)
 
-## 发送请求
+## 内置函数
 
-> Axios官方中文文档：https://www.axios-http.cn/docs/intro
+**常用函数**
 
-```javascript
-import axios from "axios"
-const http = axios.create({
-    baseURL:'',
-    timeout:5000,
-    headers:{'X-Custom-Header':'foobar'}
-});
-```
+* ref()
+* reactive()
+* computed()
+* watch()
+* watchEffect()
 
-## 实际用例
+**生命周期函数**
 
-* App.vue：Vue中所有组件的根组件
+* onBeforeMount()：在Dom属性挂载之前执行，此时HTML标签都未渲染
+* onMounted()：在Dom属性挂载后执行，此时HTML标签刚渲染
+* onBeforeUpdate()：在API数据更新前执行，此时Dom未更新
+* onUpDated()：API数据更新后执行，此时Dom刚更新
 
-```javascript
-<template>
-//页面内容或组件
-</template>
+**组件传值函数**
 
-<script lang="ts" setup>
-//写TypeScript或JavaScript函数脚本
-</script>
+* defineProps()
 
-<style scoped>
-//修改页面样式
-</style>
-```
+  ```html
+  //Father.vue
+  const data = reactive({
+      money: 100,
+      books: ["1", "2"]
+  })
+  <Son v-bind="data"></Son>
+  //Son.vue
+  //1.
+  let props1 = defineProps(["money", "books"])
+  //2.
+  let props2 = defineProps({
+  	money:	{
+  		type: Number,
+  		required: true,
+  		default: 200
+  	},
+  	books: Array
+  })
+  ```
 
-* main.ts：创建应用实例、挂载根组件、全局配置、引入全局资源
+* defineEmits()
 
-```typescript
-//创建应用实例
-import { createApp } from "vue";
-//从别处引入根组件
-import App from "./App.vue";
-//引入全局配置
-import router from "./router";
-import store from "./store";
-import './assets/styles.css';
-
-
-const app = createApp(App);
-
-app.use(store);
-app.use(router);
-app.mount("#app");
-```
-
-___
-
-```javascript
-const { proxy } = getCurrentInstance();
-    A[调用 getCurrentInstance] --> B{获取 proxy 对象}
-    B --> C[使用 useDict 获取字典数据]
-    B --> D[使用 $modal 显示提示]
-    B --> E[使用 $download 下载文件]
-    B --> F[使用 $refs 操作组件]
-    B --> G[使用 router 进行页面跳转]
-    B --> H[使用 route 获取路由参数]
-    B --> I[使用 resetForm 重置表单]
-```
+  ```html
+  //Son.vue
+  let emits = defineEmits(['buy']);
+  function buy(){
+  	emits('buy', -5);
+  }
+  ...
+  <button @click="buy"></button>
+  //Father.vue
+  function moneyMinis(args) {
+  	alert("感知到Son组件调用" + args);
+  	data.money += args;
+  }
+  ...
+  <Son @buy = "moneyMinis"></Son>
+  ```
 
 ## Router
 
-### 快速入门
+> Vue-Router官方中文文档：https://router.vuejs.org/zh/introduction.html
 
-* `RouterLink`：类似<a>标签功能，但vue-router能做到重新加载页面不改变url路径
-* `RouterView`：一个路由声明，在哪用到了RouterLink就在哪个页面声明一下<RouterView/>
-* route.fullpath：获取当前路由的fullpath。引入useRoute()方法使用
-* 路由器创建由createRouter()方法创建
-* router.push('目标页面url')：引入useRouter组件后使用useRouter()方法使用
+* 路由配置
 
-动态路由
+  * routes：路由表
+  * createRouter()：创建路由
+
+* 标签
+
+  * `<router-link>`
+  * `<router-view>`
+
+* 函数
+
+  * `useRoute()`：提供当前路由的信息（只读）
+
+  * `useRouter()`：提供路由器实例，用于控制路由跳转（可写）
+
+  | 方法/属性     | 所属            | 类型/功能                | 作用                         |
+  | ------------- | --------------- | ------------------------ | ---------------------------- |
+  | `useRoute()`  | Composition API | 获取当前路由信息（只读） | 例如获取 path、query、params |
+  | `useRouter()` | Composition API | 控制路由跳转（可写）     | 例如使用 push、go 进行导航   |
+  | `path`        | route           | 当前路径                 | `/user/123`                  |
+  | `params`      | route           | 动态参数                 | `{ id: "123" }`              |
+  | `query`       | route           | 查询参数                 | `{ type: "admin" }`          |
+  | `name`        | route           | 当前路由名称             | `"UserDetail"`               |
+  | `push()`      | router          | 跳转到某个路由           | 可用于页面跳转               |
+  | `go(n)`       | router          | 控制浏览器历史前进后退   | 类似 `window.history.go(n)`  |
+
+* 导航守卫
+
+  * `router.beforeEach(async (to, from) => {})`：每次路由跳转前执行，用来控制页面访问权限、登录验证、数据准备等
+
+简单实例
+
+```html
+=============================== ./src/router/index.js ===============================
+import Home from "../views/Home.vue";
+
+const SimpleRoutes = [
+	{ path: '/', component: Home},
+    { path: '/hello', component: Hello},
+	{ path: '/haha/:id', component: ()=> import('../views/Haha.vue')}
+]
+const router = createRouter({
+    history: createWebHistory(),
+    routes:SimpleRoutes
+})
+export default router
+=============================== ./src/main.js ===============================
+...
+import App from './App.vue'
+import {createApp} from 'vue'
+import router from './router'
+
+let app = createApp(App);
+app.use(router);
+app.mount('#app');
+=============================== ./src/App.vue ===============================
+<template>
+    <router-link to="/">首页</router-link>
+    <router-link to="/hello">hello</router-link>
+    <router-view/>
+</template>
+
+=============================== ./src/view/Haha.vue ===============================
+<template>
+    <h1>{{$route}}</h1>
+</template>
+```
+
+## Axios
+
+> Axios官方中文文档：https://www.axios-http.cn/docs/intro
+
+常用基本配置
 
 ```javascript
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+//基本定义
+import axios from 'axios'
+axios.
+const http = axios.create({
+    baseURL: import.
+    timeout: 10000,
+});
+export defualt http;
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-  
-      path: '/',
-      name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    },
-    {
-      path: '/user',
-      component: () => import('../views/UserView.vue')
+//配置拦截器，只拦截http请求
+http.interceptors.request.use(function (config) {
+    // 在发送请求之前做些什么
+    return config;
+  }, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  });
+
+// 添加响应拦截器，只拦截http响应
+http.interceptors.response.use(function (response) {
+    // 2xx 范围内的状态码都会触发该函数。
+    // 对响应数据做点什么
+    return response;
+  }, function (error) {
+    // 超出 2xx 范围的状态码都会触发该函数。
+    // 对响应错误做点什么
+    return Promise.reject(error);
+  });
+```
+
+## Pinia
+
+> Pinia官方中文文档：https://pinia.vuejs.org/zh/getting-started.html
+
+常用基本配置：
+
+```javascript
+// ./store/index.js
+import {createPinia} from 'pinia'
+const store = createPinia();
+export defualt store;
+
+//main.js
+const app = createApp();
+app.use(store);
+
+//选项式写法（option）
+//  ./store/user.js
+import { login, logout, getInfo } from '@/api/login'
+defineStore('user', {
+    state: () => ({
+        token: getToken(),
+        id: '',
+        name: '',
+        avatar: '',
+        roles: [],
+        permissions: []
+    }),
+    actions: {
+        login(userInfo) {
+            const username = userInfo.username.trim();
+            const password = userInfo.password;
+            const code = userInfo.code;
+            const uuid = userInfo.uuid;
+            return new Promise((resolve, reject) => {
+                login(username, password, code, uuid).then(resp => {
+                    setToken(resp.token);
+                    this.token = resp.token;
+                    resolve();
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        }
     }
-  ]
-})
-
-export default router
+});
 ```
 
 # ES6
 
 > ECMAScript2015标准
 
+原始数据类型：
+
+| 数据类型  | 示例                                   | 说明                                            |
+| --------- | -------------------------------------- | ----------------------------------------------- |
+| String    | const str1 = 'Hello';                  | ''或""定义，不可修改                            |
+| Number    | const num1 = 42.14;                    | 整数或浮点数                                    |
+| Boolean   | const isTrue = true;                   | 只有true和false两个值                           |
+| null      | let empty = null;                      | 表示”无“或”空“；类型为Object                    |
+| undefined | let x;                                 | 声明变量但未赋值；函数没有返回值时返回undefined |
+| Symbol    | const sym1 = Symbol('description')     | 唯一且不可变；两个Symbol值一样时===返回false    |
+| BigInt    | const big1 = BigInt("123456789101112") | 任意精度；数字后加`n`或BigInt()创建             |
+
+对象类型：
+
+| 数据类型                 | 示例                                                         | 说明                                                         |
+| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Object                   | const person = {name:"tom", age:19, greet(){console.log('hello, ${this.name}')}} | 可定义任意初始类型和方法                                     |
+| Array                    | const arr = ['a', 'b', 'c'];  arr.push('d')                  | 有序的数据集合                                               |
+| Set                      | const set = new Set();                                       | 值唯一，按照插入顺序排序                                     |
+| Map                      | const map = new Map();                                       | 键值对，键可为任意类型                                       |
+| Date                     | const now = new Date();                                      | 时期和时间                                                   |
+| RegExp                   | const regex = /ab+c/i;   匹配abc、aBc、abbc                  | 用于模式匹配和文本搜索替换                                   |
+| WeakSet & WeakMap        | const weakSet = new WeakSet();   const weakMap = new WeakMap(); | 弱引用集合，键必须是对象                                     |
+| TypedArray & ArrayBuffer | const buffer = new ArrayBuffer(8);    const int32View = new Int32Array(buffer); | 处理二进制数据 TypedArray是类数组视图，ArrayBuffer是原始二进制缓冲区 |
+| DataView                 | const buffer = new ArrayBuffer(16);      const view = new DataView(buffer); | 另一种访问ArrayBuffer的方式                                  |
+
 ## 基础语法
 
-* **let、const用法**
+* **let、const用法、解构表达式**
 
 ```javascript
 let a = 1;    //局部变量，不可重复声明
@@ -237,7 +378,7 @@ sum(1, 5)
 let info = `你好，我的名字是：${name}, 年龄是：${age}，邮箱是：${person.email}`
 ```
 
-* **Promise**：待定（pending）、已兑现（fulfilled）、已拒绝（rejected）
+* **Promise API**：待定（pending）、已兑现（fulfilled）、已拒绝（rejected）
 
 ```javascript
 //异步对象，声明后在后台运行，运用 .then 接收异步返回数据。类似CompletableFuture
@@ -305,8 +446,13 @@ function func3() {
 * **export 和 export default**
 
 ```javascript
+//export
 export function func(){}
 export const a = {}
+
+//export defualt
+const store = createPinia();
+export defualt store
 ```
 
 # Vite
