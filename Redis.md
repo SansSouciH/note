@@ -13,18 +13,9 @@
 * **SET** key value 					         设置指定key的值
 * **GET** key                                        获取指定key的值
 * **SETEX** key seconds value         设置指定key的值，并将 key 的过期时间设为 seconds 秒
-* **SETNX** key value                        只有在 key    不存在时设置 key 的值
+* **SETNX** key value                        只有在key不存在时设置key的值
 
 > String类型是一个二进制安全的。意味着String可以包含任何数据，比如jpg图片或者序列化的对象，String类型是Redis最基本的数据类型，一个Redis中字符串value最多可以是512M
-
-拓展指令：
-
-* mset <key1> <value1> <key2> <value2> <key3> <value3>...：设置多个键值对
-* msetnx <key1> <value1> <key2> <value2>...：设置多个键值对（当设置中有任何一个key在redis中已经存在那么所有键值对全部设置失败）
-* getrange <name> 0 3 ：获取name字符串中下标为[0,3]的值
-* setrange <name> 3 <value>：在下标为3的地方插入一个值
-* setex <key> <过期时间> <value>：设置指定的过期时间（秒）
-* getset <key> <value>：设置新值的同时获取旧值
 
 **Redis中String的数据结构：**
 
@@ -59,25 +50,6 @@
 
 > Redis列表是简单的**字符串链表**，按照插入顺序排序。底层是一个**双向循环链表**，通过两端操作性能比较高，通过索引下标的操作中间表节点性能较差
 
-基本指令：
-
-* lpush <key> <element> ...，rpush <key1> <element> ...：从左边or右边插入n个值
-
-* lpop <key>，rpop <key>：从左边or右边取出1个key中的值，值在键在，值光键亡
-
-* rpoplpush <key1> <key2>：从key1的右边取出一个值加入到key2的左边
-
-* lrange <key> 0 1：获得[0,1]下标的元素（[0,-1]标识获取列表中所有元素），0标识最左边第一个值，-1标识最右边第一个值
-
-* lindex <key> <index>：获取key列表中index下标的元素（下标从0开始）
-* llen <key>：获取列表的长度
-
-拓展指令：
-
-* linsert <key> after/before  <value1> <value2>：在key列表中的value1前面或后面加入value2
-* lrem <key> <count> <element>：从左边删除count个名为元素element值（从左到右）
-* lset <key> <index> <value>：在key列表的index下标上换上新的value值
-
 ---
 
 **Redis中List的数据结构：**
@@ -95,20 +67,6 @@
 
 > 与list基本一样，不同的是set有自动去重功能，底层是字典的Hash表的结构，做增删查的操作基本都是O(1)的时间复杂度
 
-基本指令：
-
-* sadd <key> <value1> <value2> ...：创建一个key，连续加入多个values
-* smembers <key>：取出该集合的所有值
-* sismember <key> <value>：判断集合key是否含有该value值，有1，没有0
-* scard <key>：返回该集合的元素个数
-* srem <key> <value1> <value2> ...：删除key中的多个指定元素
-* spop <key>：随机从该集合中吐出一个值
-* srandmember <key> <n>：随机从该集合中取出n个值，不会从集合中删除
-* smove <source> <destination> value：把集合中一个值从一个集合移动到另一个集合中
-* sinter <key1> <key2>：返回两个集合的交集元素
-* sunion <key1> <key2>：返回两个集合的并集元素
-* sdiff <key1> <key2>：返回两个集合的差集元素
-
 ---
 
 **Redis中Set的数据结构：**
@@ -123,19 +81,6 @@
 - **ZREM** key member [member ...]                                移除有序集合中的一个或多个成员
 
 > zset与set很类似，不过zset除了拥有set的特性之外，还能自动排序。有序集合中每个成员都关联了一个评分（score），这个评分被用来按照从最低分到最高分的方式排序集合中的成员。集合的成员是唯一的，但是评分是可以重复的
-
-基本指令：
-
-* zadd <key> <score> <value1> <score> <value2> <score> <value3>...：将一个或者多个member元素及其score值加入到有序集合key当中
-* zrange <key> <start> <stop> [withscores]：返回有序集key中，下标在[start,stop]之间的元素，带上withscores可以让分数和值一起返回得到结果集
-* zrangebyscore <key> min max [withscores] [limit offset count]：取出评分（score）在[min,max]之间的值。从小到大排序
-* zrevrangebyscore  <key> max min [withscores] [limit offset count]：和上方法一样，不过采用从大到小排序
-
-拓展指令：
-
-* zincrby <key> <number> <value>：
-* zount <key> min max：
-* zrank <key> <value>：返回key中value的排名（0是第一位）
 
 ---
 
@@ -158,14 +103,14 @@ decrby <key> 10：将key中存储的数字减10
 
 `注意：在redis中incre和decr的操作是原子性的，也就是在多线程中是不会被打断的`
 
-### 常用指令
+### 通用指令
 
 Redis的通用命令是不分数据类型的，都可以使用的命令：
 
-- KEYS pattern 		查找所有符合给定模式( pattern)的 key 
-- EXISTS key 		检查给定 key 是否存在
-- TYPE key 		返回 key 所储存的值的类型
-- DEL key 		该命令用于在 key 存在是删除 key
+- KEYS pattern：查找所有符合给定模式( pattern)的 key 
+- EXISTS key：检查给定 key 是否存在
+- TYPE key：返回 key 所储存的值的类型
+- DEL key：该命令用于在 key 存在是删除 key
 
 **key相关**命令：
 
@@ -180,24 +125,18 @@ Redis的通用命令是不分数据类型的，都可以使用的命令：
 对**库相关**命令
 
 * dbsize：查看当前redis库中有多少个key
+
 * select 15：切换到15号redis库
+
 * flushdb：清空当前库中所有内容
+
 * flushall：清空所有库中的所有内容
---
-拓展：
-* 设置密码：config set requirepass 123456
-* 获取密码：config get requirepass
 
----
+  拓展：
 
-拓展：
+* **设置密码**：config set requirepass 123456
 
-```shell
-# 设置
-config set requirepass [密码]
-# 获取redis密码
-config get requirepass
-```
+* **获取密码**：config get requirepass
 
 ## 高级部分
 
@@ -304,7 +243,7 @@ AOF**特点**：
 ###################################  NETWORK ###################################
 # 指定 redis 只接收来自于该IP地址的请求，如果不进行设置，那么将处理所有请求
 bind 127.0.0.1
- 
+
 # 是否开启保护模式，默认开启。要是配置里没有指定bind和密码。开启该参数后，redis只会本地进行访问，拒绝外部访问。要是开启了密码和bind，可以开启。否则最好关闭，设置为no
 protected-mode yes
  
@@ -503,12 +442,6 @@ aof-use-rdb-preamble yes
 1. key：键
 2. next：下一个entry的指针（出现哈希冲突的时候才会使用到next指向下一个节点）
 3. union：val。节点中存储数据的变量
-
-### 网络模型
-
-### 通信协议
-
-### 内存策略
 
 ## 面试相关
 
@@ -990,75 +923,6 @@ S: edc7a799e1cfd75e4d80767958930d86516ffc9b 192.168.200.129:7004
 * Jedis：学习成本低，方法名就是Redis命令。Jedis实例线程不安全，多线程环境下需要连接池使用。
 * Lettuce：基于Netty实现，支持同步、异步和响应式编程，线程安全。支持Redis哨兵、集群、管道模式。
 * Redisson：基于Redis实现的分布式、可伸缩的Java数据结构集合。包含：Map、Queue、Lock、AtomicLong、Semaphore
-
-### Jedis
-
-1. 引入依赖
-
-   ```xml
-   <dependency>
-   	<groupId>redis.clients</groupId>
-       <artifactId>jedis</artifactId>
-   	<version>3.7.0</version>
-   </dependency>
-   ```
-
-2. 建立连接
-
-   ```java
-   private Jedis jedis;
-   
-   //单元测试注解
-   @BeforeEach
-   void setUp() {
-       //建立连接
-       jedis = new Jedis("127.0.0.1", 6379);
-       //设置密码
-       jedis.auth("xxxxxxxxx");
-       //选择库0 ~ 15
-       jedis.select(0);
-   }
-   
-   @Test
-   void test() {
-       //方法名称就是redis命令的名称。常用五大数据类型名称：set、lpush、sadd、hset、zset
-       jedis.set("key", "value");
-       String value jedis.get("key");
-   }
-   
-   @AfterEach
-   void shutDown() {
-       //释放资源
-       if (jedis != null) {
-           jedis.close();  //close方法在用到连接池时会自动归还连接对象
-       }
-   }
-   ```
-
-3. 配置连接池
-
-   ```java
-   //Jedis直连大量创建销毁连接性能消耗大，且线程不安全
-   //配置Jedis连接池
-   public class JedisConnectionFactory{
-       private static final JedisPool jedisPool;
-       
-       static {
-           //连接池配置
-           JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-           jedisPoolConfig.setMaxTotal(10);  //最大连接数
-           jedisPoolConfig.setMaxIdle(10);  //最大空闲连接
-           jedisPoolConfig.setMinIdle(0);  //最小空闲连接
-           jedisPoolConfig.setMaxWaitMillis(200);  //最长等待时间
-           
-           jedisPoolConfig = new JedisPool(jedisPoolConfig, "127.0.0.1", 6379, 1000, "auth");  //（配置对象、Ip、端口、timeout、auth）
-       }
-       
-       static Jedis getJedis() {
-           return jedisPool.getResource();
-       }
-   }
-   ```
 
 ### Spring Data Redis
 

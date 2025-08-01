@@ -1,5 +1,12 @@
 # Nginx
 
+```shell
+# 启动
+start nginx.exe
+# 重新加载配置文件
+nginx.exe -s reload
+```
+
 ## 基本操作
 
 > 下载：Docker pull Nginx；或https://nginx.org/download/nginx-1.26.2.zip

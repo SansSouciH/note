@@ -482,6 +482,8 @@ npm create vite
 
 * vite.config.js：服务器配置、别名配置、构建配置、环境变量配置、其他配置
 
+# TypeScript
+
 # HTML
 
 ### 1. **基础结构标签**

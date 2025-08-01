@@ -71,10 +71,11 @@ java -jar xxxxxxx.jar
 
 ## Spring Cache
 
-* `@EnableCaching`：开启缓存注解，通常在启动类上
-* `@Cacheable(cacheNames="xxxxxCache", key="#xxxxxx.id")`：方法执行前查询缓存，没有指定缓存数据时调用方法并将方法返回值加入缓存
-* `@CachePut`：将方法返回值放到缓存中
-* `@CacheEvict`：将一条或多条数据从缓存中删除
+* `@EnableCaching`：类注解，开启缓存注解，通常在启动类上，或配置类
+* `@Cacheable(cacheNames="xxxxxCache", key="#xxxxxx.id")`：方法注解，执行前查询缓存，没有指定缓存数据时调用方法并将方法返回值加入缓存
+* `@CachePut`：方法注解，无论是否有缓存都会执行方法，并将方法返回值放到缓存中
+* `@CacheEvict`：方法注解，将一条或多条数据从缓存中删除。beforeInvocation=true时会在方法执行前删除缓存
+* `@CacheConfig`：类注解，用于配置该类中缓存注解的公共属性，如缓存名称等。
 
 ## Spring Task
 
@@ -84,10 +85,11 @@ java -jar xxxxxxx.jar
   * **`fixedDelay`**：固定延迟执行（单位：毫秒），等待上次任务完成后开始计时。
   * **`cron`**：使用Cron表达式定义复杂调度规则。
 
+## Spring Security
 
-## 其他
-
-**自动配置原理**
-
-> @SpringApplication注解组合EnableAutoConfigration注解。EnableAutoConfiguration注解组合了Import注解，导入了AutoConfigurationSelector类。实现接口中的selectImports方法最终通过流读取META-INF目录下后缀名为imports的文件，读取文件中的全类名后加载自动配置。在springboot2.7以前读取spring.factories文件
+> RBAC（基于角色的认证和授权）
+>
+> Authentication（认证）
+>
+> Authorization（授权）
 

@@ -1,16 +1,5 @@
 # SpringCloud
 
-| **SpringCloud**版本                                          | **SpringBoot**版本                            |
-| ------------------------------------------------------------ | --------------------------------------------- |
-| [2022.0.x](https://github.com/spring-cloud/spring-cloud-release/wiki/Spring-Cloud-2022.0-Release-Notes) aka Kilburn | 3.0.x                                         |
-| [2021.0.x](https://github.com/spring-cloud/spring-cloud-release/wiki/Spring-Cloud-2021.0-Release-Notes) aka Jubilee  *常用 | 2.6.x, 2.7.x (Starting with  2021.0.3)  *常用 |
-| [2020.0.x](https://github.com/spring-cloud/spring-cloud-release/wiki/Spring-Cloud-2020.0-Release-Notes) aka Ilford | 2.4.x, 2.5.x (Starting with  2020.0.3)        |
-| [Hoxton](https://github.com/spring-cloud/spring-cloud-release/wiki/Spring-Cloud-Hoxton-Release-Notes) | 2.2.x, 2.3.x (Starting with SR5)              |
-| [Greenwich](https://github.com/spring-projects/spring-cloud/wiki/Spring-Cloud-Greenwich-Release-Notes) | 2.1.x                                         |
-| [Finchley](https://github.com/spring-projects/spring-cloud/wiki/Spring-Cloud-Finchley-Release-Notes) | 2.0.x                                         |
-| [Edgware](https://github.com/spring-projects/spring-cloud/wiki/Spring-Cloud-Edgware-Release-Notes) | 1.5.x                                         |
-| [Dalston](https://github.com/spring-projects/spring-cloud/wiki/Spring-Cloud-Dalston-Release-Notes) | 1.5.x                                         |
-
 > 微服务：
 >
 > * 服务拆分、服务治理、远程调用；
@@ -88,8 +77,6 @@ spring:
 ### Nacos
 
 > 独立的服务注册中心服务。Docker部署，准备MySQL数据表持久化Nacos数据
-
-#### 快速入门
 
 *引入依赖*
 
