@@ -125,8 +125,6 @@ writer.close()
 
 直接提供了**各种经典的 CNN 网络架构和预训练模型**，比如 ResNet、VGG、AlexNet、MobileNet 等
 
-
-
 ### Transforms
 
 > 配合 `datasets` 使用，负责**数据增强、归一化、转换成 Tensor 等操作**
